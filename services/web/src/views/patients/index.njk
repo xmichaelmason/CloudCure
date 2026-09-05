@@ -1,0 +1,29 @@
+{% extends "layout.njk" %}
+{% block title %}Patients — CloudCure{% endblock %}
+{% block content %}
+  <h1>Patients</h1>
+  <p><a class="button" href="/patients/new">New patient</a></p>
+  <form method="get" action="/patients">
+    <div class="form-field">
+      <label for="q">Search by name</label>
+      <input type="search" id="q" name="q" value="{{ q }}">
+    </div>
+    <button type="submit">Search</button>
+  </form>
+  {% if result.items.length == 0 %}
+    <p>No patients found.</p>
+  {% else %}
+    <table>
+      <thead><tr><th>Name</th><th>Date of birth</th><th>Phone</th></tr></thead>
+      <tbody>
+        {% for patient in result.items %}
+          <tr>
+            <td><a href="/patients/{{ patient.patientId }}">{{ patient.firstName }} {{ patient.lastName }}</a></td>
+            <td>{{ patient.dateOfBirth }}</td>
+            <td>{{ patient.phoneDisplay }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "layout.njk" %}
+{% block title %}Finalize diagnosis — {{ encounter.patientName }} — CloudCure{% endblock %}
+{% block content %}
+  <h1>Finalize diagnosis — {{ encounter.patientName }}</h1>
+  {% if error %}<p class="error-text">{{ error }}</p>{% endif %}
+
+  <h2>Assessment</h2>
+  <p><strong>Chief complaint:</strong> {{ encounter.assessment.chiefComplaint }}</p>
+  <p><strong>History:</strong> {{ encounter.assessment.historyOfPresentIllness }}</p>
+  <p><strong>Pain scale:</strong> {{ encounter.assessment.painScale }}/10</p>
+  {% if encounter.assessment.painBodyRegions.length > 0 %}
+    <p><strong>Pain locations:</strong> {{ encounter.assessment.painBodyRegions | join(", ") }}</p>
+  {% endif %}
+
+  <h2>Vitals</h2>
+  <p>{{ encounter.vitals.systolicMmHg }}/{{ encounter.vitals.diastolicMmHg }} mmHg, {{ encounter.vitals.heartRateBpm }} bpm, {{ encounter.vitals.temperatureValue }}°{{ "F" if encounter.vitals.temperatureUnit == "Fahrenheit" else "C" }}</p>
+
+  <form method="post" action="/encounters/{{ encounter.encounterId }}/diagnosis">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <div class="form-field">
+      <label for="doctorDiagnosis">Diagnosis</label>
+      <input type="text" id="doctorDiagnosis" name="doctorDiagnosis" required value="{{ form.doctorDiagnosis or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="recommendedTreatment">Recommended treatment</label>
+      <input type="text" id="recommendedTreatment" name="recommendedTreatment" required value="{{ form.recommendedTreatment or '' }}">
+    </div>
+    <button type="submit">Finalize</button>
+  </form>
+{% endblock %}

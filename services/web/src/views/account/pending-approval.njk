@@ -1,0 +1,9 @@
+{% extends "layout.njk" %}
+{% block title %}Pending approval — CloudCure{% endblock %}
+{% block content %}
+  <h1>Awaiting approval</h1>
+  <p class="notice">
+    Thanks for registering, {{ currentPerson.firstName }}. An administrator needs to approve
+    your account and assign a role before you can access clinical pages.
+  </p>
+{% endblock %}

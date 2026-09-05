@@ -1,0 +1,44 @@
+{% extends "layout.njk" %}
+{% block title %}Vitals — {{ encounter.patientName }} — CloudCure{% endblock %}
+{% block content %}
+  <h1>Vitals — {{ encounter.patientName }}</h1>
+  {% if error %}<p class="error-text">{{ error }}</p>{% endif %}
+  <form method="post" action="/encounters/{{ encounter.encounterId }}/vitals">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    <div class="form-field"><label for="systolicMmHg">Systolic (mmHg)</label><input type="number" id="systolicMmHg" name="systolicMmHg" required value="{{ form.systolicMmHg or '' }}"></div>
+    <div class="form-field"><label for="diastolicMmHg">Diastolic (mmHg)</label><input type="number" id="diastolicMmHg" name="diastolicMmHg" required value="{{ form.diastolicMmHg or '' }}"></div>
+    <div class="form-field"><label for="oxygenSaturationPct">Oxygen saturation (%)</label><input type="number" step="0.1" id="oxygenSaturationPct" name="oxygenSaturationPct" required value="{{ form.oxygenSaturationPct or '' }}"></div>
+    <div class="form-field"><label for="heartRateBpm">Heart rate (bpm)</label><input type="number" id="heartRateBpm" name="heartRateBpm" required value="{{ form.heartRateBpm or '' }}"></div>
+    <div class="form-field"><label for="respiratoryRateBpm">Respiratory rate (bpm)</label><input type="number" id="respiratoryRateBpm" name="respiratoryRateBpm" required value="{{ form.respiratoryRateBpm or '' }}"></div>
+
+    <div class="form-field">
+      <label for="temperatureValue">Temperature</label>
+      <input type="number" step="0.1" id="temperatureValue" name="temperatureValue" required value="{{ form.temperatureValue or '' }}">
+      <select name="temperatureUnit">
+        <option value="Fahrenheit">°F</option>
+        <option value="Celsius">°C</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="heightValue">Height</label>
+      <input type="number" step="0.1" id="heightValue" name="heightValue" required value="{{ form.heightValue or '' }}">
+      <select name="heightUnit">
+        <option value="Centimeters">cm</option>
+        <option value="Inches">in</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="weightValue">Weight</label>
+      <input type="number" step="0.1" id="weightValue" name="weightValue" required value="{{ form.weightValue or '' }}">
+      <select name="weightUnit">
+        <option value="Kilograms">kg</option>
+        <option value="Pounds">lb</option>
+      </select>
+    </div>
+
+    <button type="submit">Save vitals</button>
+  </form>
+{% endblock %}

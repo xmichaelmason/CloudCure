@@ -1,0 +1,35 @@
+{% extends "layout.njk" %}
+{% block title %}Assign doctor — CloudCure{% endblock %}
+{% block content %}
+  <h1>Assign doctor</h1>
+  <form method="get" action="/patients/{{ patientId }}/encounters/{{ encounterId }}/assign-doctor">
+    <div class="form-field">
+      <label for="q">Search by name</label>
+      <input type="search" id="q" name="q" value="{{ q }}">
+    </div>
+    <button type="submit">Search</button>
+  </form>
+
+  {% if doctors.length == 0 %}
+    <p>No doctors found.</p>
+  {% else %}
+    <table>
+      <thead><tr><th>Name</th><th>Specialization</th><th></th></tr></thead>
+      <tbody>
+        {% for doctor in doctors %}
+          <tr>
+            <td>{{ doctor.firstName }} {{ doctor.lastName }}</td>
+            <td>{{ doctor.specialization }}</td>
+            <td>
+              <form method="post" action="/patients/{{ patientId }}/encounters/{{ encounterId }}/assign-doctor">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <input type="hidden" name="staffMemberId" value="{{ doctor.staffMemberId }}">
+                <button type="submit">Assign</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}

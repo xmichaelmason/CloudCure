@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CloudCure{% endblock %}</title>
+  <link rel="stylesheet" href="/css/site.css">
+  <script src="/js/htmx.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-header__brand" href="/">CloudCure</a>
+    <nav class="site-header__nav">
+      {% if isAuthenticated %}
+        <span>{{ currentPerson.firstName }} {{ currentPerson.lastName }}</span>
+        <a href="/logout">Log out</a>
+      {% else %}
+        <a href="/login">Log in</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

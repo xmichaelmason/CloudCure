@@ -1,0 +1,19 @@
+# Do NOT add EF Core migration output here — the old Backend/Data/Migrations/
+# exclusion is exactly the mistake v2 must not repeat (see plan section 5).
+
+# .NET build output (also covered by the repo-root .gitignore, kept here for clarity)
+bin/
+obj/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Secrets — real values live only in a local, gitignored .env
+.env
+.env.*
+!.env.example
+
+# Local data / logs
+*.log

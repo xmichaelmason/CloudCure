@@ -1,0 +1,20 @@
+# Dev-only overrides: bind mounts + hot reload, and publishing the api port for
+# local Postman/debugging. Not used in CI — CI runs against docker-compose.yml alone.
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+
+  api:
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./services/api/src:/src/src
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+  web:
+    volumes:
+      - ./services/web/src:/app/src
+    environment:
+      NODE_ENV: development

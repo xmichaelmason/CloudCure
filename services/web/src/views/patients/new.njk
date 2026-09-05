@@ -1,0 +1,91 @@
+{% extends "layout.njk" %}
+{% block title %}New patient — CloudCure{% endblock %}
+{% macro dynamicList(name, label, values) %}
+  <div class="dynamic-list" data-list="{{ name }}">
+    <label>{{ label }}</label>
+    {% if values.length == 0 %}
+      <div class="dynamic-list__row">
+        <input type="text" name="{{ name }}">
+        <button type="button" class="dynamic-list__remove">Remove</button>
+      </div>
+    {% else %}
+      {% for value in values %}
+        <div class="dynamic-list__row">
+          <input type="text" name="{{ name }}" value="{{ value }}">
+          <button type="button" class="dynamic-list__remove">Remove</button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    <button type="button" class="dynamic-list__add" data-list-add="{{ name }}">Add {{ label | lower }}</button>
+  </div>
+{% endmacro %}
+{% block content %}
+  <h1>New patient</h1>
+  {% if error %}<p class="error-text">{{ error }}</p>{% endif %}
+  <form method="post" action="/patients">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    <div class="form-field">
+      <label for="firstName">First name</label>
+      <input type="text" id="firstName" name="firstName" required value="{{ form.firstName or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="lastName">Last name</label>
+      <input type="text" id="lastName" name="lastName" required value="{{ form.lastName or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="dateOfBirth">Date of birth</label>
+      <input type="date" id="dateOfBirth" name="dateOfBirth" required value="{{ form.dateOfBirth or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="phone">Phone</label>
+      <input type="tel" id="phone" name="phone" required data-phone-mask value="{{ form.phone or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="email">Email (optional)</label>
+      <input type="email" id="email" name="email" value="{{ form.email or '' }}">
+    </div>
+
+    <div class="form-field">
+      <label for="addressLine1">Address line 1 (optional)</label>
+      <input type="text" id="addressLine1" name="addressLine1" value="{{ form.addressLine1 or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="addressLine2">Address line 2 (optional)</label>
+      <input type="text" id="addressLine2" name="addressLine2" value="{{ form.addressLine2 or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="city">City</label>
+      <input type="text" id="city" name="city" value="{{ form.city or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="stateProvince">State</label>
+      <input type="text" id="stateProvince" name="stateProvince" value="{{ form.stateProvince or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="postalCode">Postal code</label>
+      <input type="text" id="postalCode" name="postalCode" value="{{ form.postalCode or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="countryCode">Country code</label>
+      <input type="text" id="countryCode" name="countryCode" maxlength="2" value="{{ form.countryCode or 'US' }}">
+    </div>
+
+    <div class="form-field">
+      <label for="emergencyContactName">Emergency contact name (optional)</label>
+      <input type="text" id="emergencyContactName" name="emergencyContactName" value="{{ form.emergencyContactName or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="emergencyContactPhone">Emergency contact phone (optional)</label>
+      <input type="tel" id="emergencyContactPhone" name="emergencyContactPhone" data-phone-mask value="{{ form.emergencyContactPhone or '' }}">
+    </div>
+
+    {{ dynamicList("allergies", "Allergies", form.allergies or []) }}
+    {{ dynamicList("conditions", "Conditions", form.conditions or []) }}
+    {{ dynamicList("medications", "Medications", form.medications or []) }}
+    {{ dynamicList("surgeries", "Surgeries", form.surgeries or []) }}
+
+    <button type="submit">Create patient</button>
+  </form>
+  <script src="/js/site.js"></script>
+{% endblock %}

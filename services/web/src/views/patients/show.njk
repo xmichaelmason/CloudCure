@@ -1,0 +1,32 @@
+{% extends "layout.njk" %}
+{% block title %}{{ patient.firstName }} {{ patient.lastName }} — CloudCure{% endblock %}
+{% block content %}
+  <h1>{{ patient.firstName }} {{ patient.lastName }}</h1>
+  <dl>
+    <dt>Date of birth</dt><dd>{{ patient.dateOfBirth }}</dd>
+    <dt>Phone</dt><dd>{{ patient.phoneDisplay }}</dd>
+    {% if patient.email %}<dt>Email</dt><dd>{{ patient.email }}</dd>{% endif %}
+    {% if patient.emergencyContactName %}
+      <dt>Emergency contact</dt><dd>{{ patient.emergencyContactName }} — {{ patient.emergencyContactPhoneDisplay }}</dd>
+    {% endif %}
+  </dl>
+
+  <h2>Allergies</h2>
+  {% if patient.allergies.length == 0 %}<p>None recorded.</p>{% else %}<ul>{% for item in patient.allergies %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
+
+  <h2>Conditions</h2>
+  {% if patient.conditions.length == 0 %}<p>None recorded.</p>{% else %}<ul>{% for item in patient.conditions %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
+
+  <h2>Medications</h2>
+  {% if patient.medications.length == 0 %}<p>None recorded.</p>{% else %}<ul>{% for item in patient.medications %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
+
+  <h2>Surgeries</h2>
+  {% if patient.surgeries.length == 0 %}<p>None recorded.</p>{% else %}<ul>{% for item in patient.surgeries %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
+
+  <p><a class="button" href="/patients/{{ patient.patientId }}/screenings/new?template=covid19_v1">Start COVID-19 screening</a></p>
+
+  <form method="post" action="/patients/{{ patient.patientId }}/encounters">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <button type="submit">Start encounter</button>
+  </form>
+{% endblock %}

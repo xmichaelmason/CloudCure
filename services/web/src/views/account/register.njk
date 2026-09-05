@@ -1,0 +1,30 @@
+{% extends "layout.njk" %}
+{% block title %}Register — CloudCure{% endblock %}
+{% block content %}
+  <h1>Complete your staff profile</h1>
+  {% if error %}<p class="error-text">{{ error }}</p>{% endif %}
+  <form method="post" action="/account/register">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <div class="form-field">
+      <label for="workEmail">Work email</label>
+      <input type="email" id="workEmail" name="workEmail" required value="{{ currentPerson.email or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="specialization">Specialization</label>
+      <input type="text" id="specialization" name="specialization" required>
+    </div>
+    <div class="form-field">
+      <label for="startDate">Start date</label>
+      <input type="date" id="startDate" name="startDate" required>
+    </div>
+    <div class="form-field">
+      <label for="roomNumber">Room number (optional)</label>
+      <input type="text" id="roomNumber" name="roomNumber">
+    </div>
+    <div class="form-field">
+      <label for="educationDegree">Education / degree</label>
+      <input type="text" id="educationDegree" name="educationDegree" required>
+    </div>
+    <button type="submit">Submit for approval</button>
+  </form>
+{% endblock %}

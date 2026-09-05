@@ -1,0 +1,16 @@
+{% extends "layout.njk" %}
+{% block title %}Home — CloudCure{% endblock %}
+{% block content %}
+  {% if not isAuthenticated %}
+    <h1>Welcome to CloudCure</h1>
+    <p><a class="button" href="/login">Log in</a></p>
+  {% elif currentPerson.status == "Pending" %}
+    <p class="notice">Your account is awaiting admin approval. <a href="/account/pending-approval">Learn more</a>.</p>
+  {% else %}
+    <h1>Dashboard</h1>
+    <p>Signed in with roles: {{ currentPerson.roles | join(", ") }}</p>
+    {% if "Admin" in currentPerson.roles %}
+      <p><a href="/staff/pending-approvals">Review pending staff approvals</a></p>
+    {% endif %}
+  {% endif %}
+{% endblock %}

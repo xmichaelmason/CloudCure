@@ -1,0 +1,74 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cloudcure}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cloudcure}
+      POSTGRES_DB: ${POSTGRES_DB:-cloudcure_v2}
+    volumes:
+      - cloudcure_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cloudcure} -d ${POSTGRES_DB:-cloudcure_v2}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./services/api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Default: Host=postgres;Port=5432;Database=${POSTGRES_DB:-cloudcure_v2};Username=${POSTGRES_USER:-cloudcure};Password=${POSTGRES_PASSWORD:-cloudcure}
+      Internal__JwtSharedSecret: ${INTERNAL_JWT_SECRET}
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://observability:5080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Not published to the host in a "prod-like" run — internal network only.
+    # docker-compose.override.yml publishes it for local debugging/Postman.
+
+  web:
+    build: ./services/web
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      API_BASE_URL: http://api:8080
+      INTERNAL_JWT_SECRET: ${INTERNAL_JWT_SECRET}
+      AUTH0_DOMAIN: ${AUTH0_DOMAIN}
+      AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID}
+      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
+      AUTH0_SECRET: ${AUTH0_SECRET}
+      AUTH0_BASE_URL: ${AUTH0_BASE_URL:-http://localhost:3000}
+      CSRF_SECRET: ${CSRF_SECRET}
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://observability:5080
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/healthz"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "3000:3000" # the only service exposed to the host/browser
+
+  observability:
+    image: openobserve/openobserve:latest
+    restart: unless-stopped
+    environment:
+      ZO_ROOT_USER_EMAIL: admin@cloudcure.local
+      # OpenObserve requires 8-128 chars with upper/lower/digit/special — the fallback
+      # here is dev-only; always set a real OBSERVABILITY_ADMIN_PASSWORD in .env.
+      ZO_ROOT_USER_PASSWORD: ${OBSERVABILITY_ADMIN_PASSWORD:-CloudCure!Dev1}
+    volumes:
+      - cloudcure_o2data:/data
+    ports:
+      - "5081:5080" # OpenObserve UI, dev convenience only
+
+volumes:
+  cloudcure_pgdata:
+  cloudcure_o2data:

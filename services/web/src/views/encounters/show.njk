@@ -1,0 +1,59 @@
+{% extends "layout.njk" %}
+{% block title %}Encounter — {{ encounter.patientName }} — CloudCure{% endblock %}
+{% block content %}
+  <div class="no-print">
+    <p>Attending doctor: {{ encounter.attendingDoctorName or "Unassigned" }}
+      — <a href="/patients/{{ encounter.patientId }}/encounters/{{ encounter.encounterId }}/assign-doctor">Assign doctor</a></p>
+
+    {% if encounter.stage == "VitalsPending" %}
+      <p><a class="button" href="/encounters/{{ encounter.encounterId }}/vitals">Enter vitals</a></p>
+    {% elif encounter.stage == "AssessmentPending" %}
+      <p><a class="button" href="/encounters/{{ encounter.encounterId }}/assessment">Enter assessment</a></p>
+    {% elif encounter.stage == "AwaitingDoctor" %}
+      <p><a class="button" href="/encounters/{{ encounter.encounterId }}/diagnosis">Finalize diagnosis</a></p>
+    {% elif encounter.stage == "Finalized" %}
+      <p><button type="button" onclick="window.print()">Print report</button></p>
+    {% endif %}
+  </div>
+
+  <div class="report">
+    <h1>Encounter — {{ encounter.patientName }}</h1>
+    <p>Stage: <strong>{{ encounter.stage }}</strong></p>
+
+    {% if encounter.vitals %}
+      <h2>Vitals</h2>
+      <dl>
+        <dt>Blood pressure</dt><dd>{{ encounter.vitals.systolicMmHg }}/{{ encounter.vitals.diastolicMmHg }} mmHg</dd>
+        <dt>Heart rate</dt><dd>{{ encounter.vitals.heartRateBpm }} bpm</dd>
+        <dt>Respiratory rate</dt><dd>{{ encounter.vitals.respiratoryRateBpm }} bpm</dd>
+        <dt>Oxygen saturation</dt><dd>{{ encounter.vitals.oxygenSaturationPct }}%</dd>
+        <dt>Temperature</dt><dd>{{ encounter.vitals.temperatureValue }}° {{ encounter.vitals.temperatureUnit }}</dd>
+        <dt>Height</dt><dd>{{ encounter.vitals.heightValue }} {{ encounter.vitals.heightUnit }}</dd>
+        <dt>Weight</dt><dd>{{ encounter.vitals.weightValue }} {{ encounter.vitals.weightUnit }}</dd>
+      </dl>
+    {% endif %}
+
+    {% if encounter.assessment %}
+      <h2>Assessment</h2>
+      <dl>
+        <dt>Chief complaint</dt><dd>{{ encounter.assessment.chiefComplaint }}</dd>
+        <dt>History</dt><dd>{{ encounter.assessment.historyOfPresentIllness }}</dd>
+        <dt>Pain scale</dt><dd>{{ encounter.assessment.painScale }}/10</dd>
+        {% if encounter.assessment.painBodyRegions.length > 0 %}
+          <dt>Pain locations</dt><dd>{{ encounter.assessment.painBodyRegions | join(", ") }}</dd>
+        {% endif %}
+      </dl>
+    {% endif %}
+
+    {% if encounter.diagnosis %}
+      <h2>Diagnosis</h2>
+      <dl>
+        <dt>Diagnosis</dt><dd>{{ encounter.diagnosis.doctorDiagnosis }}</dd>
+        <dt>Recommended treatment</dt><dd>{{ encounter.diagnosis.recommendedTreatment }}</dd>
+        <dt>Finalized by</dt><dd>{{ encounter.diagnosis.finalizedByName }} on {{ encounter.diagnosis.finalizedAt }}</dd>
+      </dl>
+    {% endif %}
+  </div>
+
+  <p class="no-print"><a href="/patients/{{ encounter.patientId }}">Back to patient</a></p>
+{% endblock %}

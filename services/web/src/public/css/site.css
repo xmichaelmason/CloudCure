@@ -1,0 +1,84 @@
+:root {
+  color-scheme: light;
+  --border: #d0d5dd;
+  --text: #1a1a1a;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --danger: #b91c1c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: #fafafa;
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+
+.site-header__brand { font-weight: 700; text-decoration: none; color: var(--text); }
+.site-header__nav { display: flex; gap: 1rem; align-items: center; }
+
+.site-main { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+.form-field { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+label { font-weight: 600; }
+input, select { padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
+
+button, .button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { text-align: left; padding: 0.5rem; border-bottom: 1px solid var(--border); }
+
+.notice { padding: 1rem; border-radius: 4px; background: #eff6ff; border: 1px solid #bfdbfe; }
+.error-text { color: var(--danger); }
+
+.report {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: #fff;
+  margin-top: 1rem;
+}
+.report dt { font-weight: 600; margin-top: 0.75rem; }
+.report dd { margin-left: 0; color: var(--muted); }
+
+/* Everything interaction-only (nav, forms, action buttons/links) is hidden when printing —
+   only .report and its contents are meant to end up on paper. */
+@media print {
+  .site-header,
+  .no-print {
+    display: none !important;
+  }
+
+  .site-main {
+    max-width: none;
+    padding: 0;
+  }
+
+  .report {
+    border: none;
+    padding: 0;
+  }
+
+  body {
+    background: #fff;
+  }
+}

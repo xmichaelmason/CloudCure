@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CloudCure.Api/CloudCure.Api.csproj" />
+    <Project Path="src/CloudCure.Application/CloudCure.Application.csproj" />
+    <Project Path="src/CloudCure.Domain/CloudCure.Domain.csproj" />
+    <Project Path="src/CloudCure.Infrastructure/CloudCure.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/CloudCure.Api.Tests/CloudCure.Api.Tests.csproj" />
+    <Project Path="test/CloudCure.Application.Tests/CloudCure.Application.Tests.csproj" />
+    <Project Path="test/CloudCure.Domain.Tests/CloudCure.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

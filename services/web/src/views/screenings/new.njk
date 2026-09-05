@@ -1,0 +1,23 @@
+{% extends "layout.njk" %}
+{% block title %}{{ template.title }} — CloudCure{% endblock %}
+{% block content %}
+  <h1>{{ template.title }}</h1>
+  <form method="post" action="/patients/{{ patientId }}/screenings">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <input type="hidden" name="templateCode" value="{{ template.code }}">
+
+    {% for question in template.questions %}
+      <fieldset class="form-field">
+        <legend>{{ question.questionText }}</legend>
+        {% if question.answerType == "YesNo" %}
+          <label><input type="radio" name="answer_{{ question.id }}" value="yes" required> Yes</label>
+          <label><input type="radio" name="answer_{{ question.id }}" value="no"> No</label>
+        {% else %}
+          <input type="text" name="answer_{{ question.id }}">
+        {% endif %}
+      </fieldset>
+    {% endfor %}
+
+    <button type="submit">Submit screening</button>
+  </form>
+{% endblock %}

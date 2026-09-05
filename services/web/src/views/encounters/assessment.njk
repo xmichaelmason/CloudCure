@@ -1,0 +1,36 @@
+{% extends "layout.njk" %}
+{% block title %}Assessment — {{ encounter.patientName }} — CloudCure{% endblock %}
+{% block content %}
+  <h1>Assessment — {{ encounter.patientName }}</h1>
+  {% if error %}<p class="error-text">{{ error }}</p>{% endif %}
+  <form method="post" action="/encounters/{{ encounter.encounterId }}/assessment">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    <div class="form-field">
+      <label for="chiefComplaint">Chief complaint</label>
+      <input type="text" id="chiefComplaint" name="chiefComplaint" required value="{{ form.chiefComplaint or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="historyOfPresentIllness">History of present illness</label>
+      <input type="text" id="historyOfPresentIllness" name="historyOfPresentIllness" required value="{{ form.historyOfPresentIllness or '' }}">
+    </div>
+    <div class="form-field">
+      <label for="painScale">Pain scale (0–10)</label>
+      <input type="number" id="painScale" name="painScale" min="0" max="10" required value="{{ form.painScale or 0 }}">
+    </div>
+
+    <fieldset class="form-field">
+      <legend>Pain locations</legend>
+      {% for groupName, regions in groups %}
+        <div>
+          <strong>{{ groupName }}</strong>
+          {% for region in regions %}
+            <label><input type="checkbox" name="painBodyRegionIds" value="{{ region.id }}"> {{ region.displayName }}</label>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </fieldset>
+
+    <button type="submit">Save assessment</button>
+  </form>
+{% endblock %}
