@@ -13,7 +13,6 @@ creating your first working account.
 ## 1. Clone the repo and set up your environment file
 
 ```bash
-cd v2
 cp .env.example .env
 ```
 
