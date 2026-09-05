@@ -1,4 +1,5 @@
 # CloudCure
+Rewritten and modernized [CloudCure](https://github.com/CloudCure/CloudCure)
 
 CloudCure is a small clinic-management app. A nurse checks a patient in, records their
 vitals and history, a doctor reviews the case and finalizes a diagnosis, and the whole
