@@ -131,7 +131,6 @@ itself.
 ## Project layout
 
 ```
-v2/
   docker-compose.yml            # the whole stack: postgres, api, web, observability
   docker-compose.override.yml   # local-dev extras (hot reload, exposed ports)
   .env.example                  # copy to .env and fill in real values
