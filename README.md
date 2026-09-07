@@ -1,5 +1,5 @@
 # CloudCure
-Rewritten and modernized [CloudCure](https://github.com/CloudCure/CloudCure)
+Rewritten and modernized [CloudCure](https://github.com/CloudCure/CloudCure), a project I worked on with a team in 2021.
 
 CloudCure is a small clinic-management app. A nurse checks a patient in, records their
 vitals and history, a doctor reviews the case and finalizes a diagnosis, and the whole
